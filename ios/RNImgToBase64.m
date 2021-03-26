@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(getBase64String:(NSURL*)url
     rejecter:(RCTPromiseRejectBlock)reject
 ) {
     dispatch_async(dispatch_queue_create("image_processing", 0), ^{
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:finalURL]]; 
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]]; 
         [request setHTTPMethod:@"GET"];        
         NSString *authValue = [NSString stringWithFormat:@"Basic %@", token];
 
