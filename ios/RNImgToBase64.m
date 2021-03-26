@@ -36,14 +36,10 @@ RCT_EXPORT_METHOD(getBase64String:(NSURL*)url
         NSString *authValue = [NSString stringWithFormat:@"Basic %@", token];
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            resolve([request setValue:authValue forHTTPHeaderField:@"Authorization" base64EncodedStringWithOptions:0]);
+            NSData* data = [NSData request setValue:authValue forHTTPHeaderField:@"Authorization"]
+            resolve([data base64EncodedStringWithOptions:0]);
         });
     });
 }
 
-
-
 @end
-  
-
