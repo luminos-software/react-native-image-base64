@@ -33,11 +33,11 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void getBase64String(String uri, Promise promise) {
+  public void getBase64String(String uri, String token, Promise promise) {
     Bitmap image = null;
     try {
       if (uri.contains("http")) {
-        image = getBitmapFromURL(uri);
+        image = getBitmapFromURL(uri, token);
       } else {
         image = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), Uri.parse(uri));
       }
