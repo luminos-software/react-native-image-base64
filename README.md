@@ -21,7 +21,20 @@ or
 ```javascript
 import ImgToBase64 from "react-native-image-base64";
 
-ImgToBase64.getBase64String("file://youfileurl", "token")
+ImgToBase64.getBase64String("uri", "token", "compression")
   .then((base64String) => doSomethingWith(base64String))
   .catch((err) => doSomethingWith(err));
+```
+
+Compression ussage values:
+
+- android: `0-100` (Ex: `20`);
+- iOS: `0-1` (Ex: `0.2`);
+
+```
+Interface: {
+  uri: 'String',
+  token: 'String',
+  compression: 'Number',
+}
 ```
