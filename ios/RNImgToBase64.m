@@ -12,7 +12,7 @@ RCT_EXPORT_MODULE()
 #pragma mark getBase64String
 RCT_EXPORT_METHOD(getBase64String:(NSURL*)url
     token:(NSString*)token
-    compression:(NSNumber*)compression
+    compression:(double)compression
     resolve:(RCTPromiseResolveBlock)resolve
     rejecter:(RCTPromiseRejectBlock)reject
 ) {
@@ -31,7 +31,7 @@ RCT_EXPORT_METHOD(getBase64String:(NSURL*)url
         dispatch_async(dispatch_get_main_queue(), ^{
             NSURLSessionDataTask *getDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                 UIImage *image = [UIImage imageWithData:data];
-                NSData *pngData = UIImageJPEGRepresentation(image,compression);
+                NSData *pngData = UIImageJPEGRepresentation(image, compression);
                 resolve([NSString stringWithFormat:@"data:image/jpeg;base64,%@",[pngData base64EncodedStringWithOptions:0]]);
             }];
             
