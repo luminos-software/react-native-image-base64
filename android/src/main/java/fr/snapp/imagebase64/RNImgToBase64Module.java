@@ -44,7 +44,7 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
       if (image == null) {
         promise.reject("Error", "Failed to decode Bitmap, uri: " + uri);
       } else {
-        promise.resolve(bitmapToBase64(image));
+        promise.resolve("data:image/jpeg;base64,"+bitmapToBase64(image));
       }
     } catch (Error e) {
       promise.reject("Error", "Failed to decode Bitmap: " + e);
@@ -74,7 +74,7 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
 
   private String bitmapToBase64(Bitmap bitmap) {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
     byte[] byteArray = byteArrayOutputStream.toByteArray();
     return Base64.encodeToString(byteArray, Base64.DEFAULT);
   }
