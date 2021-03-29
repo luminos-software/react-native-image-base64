@@ -32,7 +32,7 @@ RCT_EXPORT_METHOD(getBase64String:(NSURL*)url
             NSURLSessionDataTask *getDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                 UIImage *image = [UIImage imageWithData:data];
                 NSData *pngData = UIImageJPEGRepresentation(image,0.1);
-                resilver(compression);
+                resolve(compression);
                 // resolve([NSString stringWithFormat:@"data:image/jpeg;base64,%@",[pngData base64EncodedStringWithOptions:0]]);
             }];
             
