@@ -29,7 +29,9 @@ RCT_EXPORT_METHOD(getBase64String:(NSURL*)url
 
         dispatch_async(dispatch_get_main_queue(), ^{
             NSURLSessionDataTask *getDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                            resolve([data base64EncodedStringWithOptions:0]);
+                UIImage *image = [UIImage imageWithData:data];
+                NSData *pngData = UIImageJPEGRepresentation(image,0.1);
+                resolve([NSString stringWithFormat:@"data:image/jpeg;base64,%@",[pngData base64EncodedStringWithOptions:0]]);
             }];
             
             [getDataTask resume];
