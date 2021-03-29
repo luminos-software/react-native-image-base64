@@ -55,10 +55,12 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
     }
   }
 
-  public Bitmap getBitmapFromURL(String src) {
+  public Bitmap getBitmapFromURL(String src, String token) {
     try {
       URL url = new URL(src);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      String bearerAuth = "Bearer " + token;
+      connection.setRequestProperty ("Authorization", bearerAuth);
       connection.setDoInput(true);
       connection.connect();
       InputStream input = connection.getInputStream();
