@@ -23,16 +23,25 @@ RCT_EXPORT_METHOD(getBase64String:(NSURL*)url
                                                                cachePolicy:NSURLRequestUseProtocolCachePolicy
                                                            timeoutInterval:60.0];
 
-        [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        
         [request addValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
         [request setHTTPMethod:@"GET"];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             NSURLSessionDataTask *getDataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                NSHTTPURLResponse* respHttp = (NSHTTPURLResponse*) response;
+                if (respHttp.statusCode != 200){
+                    reject([NSString stringWithFormat: @"%lu", (long)error.code], error.localizedDescription, error);
+                    return;
+                }
+                
                 UIImage *image = [UIImage imageWithData:data];
                 NSData *pngData = UIImageJPEGRepresentation(image, compression);
-                resolve([NSString stringWithFormat:@"data:image/jpeg;base64,%@",[pngData base64EncodedStringWithOptions:0]]);
+                NSLog(@"[EMANUEL]%@", respHttp);
+                
+                NSDictionary *responseBody = @{@"data": [NSString stringWithFormat:@"data:image/jpeg;base64,%@",[pngData base64EncodedStringWithOptions:0]]};
+                resolve(responseBody);
+                
             }];
             
             [getDataTask resume];
