@@ -17,6 +17,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 
 public class RNImgToBase64Module extends ReactContextBaseJavaModule {
 
@@ -31,9 +33,10 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
   public String getName() {
     return "RNImgToBase64";
   }
+  
 
   @ReactMethod
-  public void getBase64String(String uri, String token, Promise promise) {
+  public void getBase64String(String uri, String token, Integer compression, Promise promise) {
     Bitmap image = null;
     try {
       if (uri.contains("http")) {
@@ -44,9 +47,10 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
       if (image == null) {
         promise.reject("Error", "Failed to decode Bitmap, uri: " + uri);
       } else {
-        Map<string, string> data = new Map<string, string>();
-        data.put("data", bitmapToBase64(image));
-        promise.resolve(data);
+        WritableMap reponseData = new Arguments().createMap();
+        String base64Image = bitmapToBase64(image,compression);
+        reponseData.putString("data", base64Image);
+        promise.resolve(reponseData);
       }
     } catch (Error e) {
       promise.reject("Error", "Failed to decode Bitmap: " + e);
@@ -57,12 +61,8 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
     }
   }
 
-  public Bitmap getBitmapFromURL(String src, String token, Number compression) {
+  public Bitmap getBitmapFromURL(String src, String token) {
     try {
-      if (compresion == null){
-        compression=100;
-      }
-
       URL url = new URL(src);
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
       String bearerAuth = "Bearer " + token;
@@ -78,9 +78,9 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
     }
   }
 
-  private String bitmapToBase64(Bitmap bitmap) {
+  private String bitmapToBase64(Bitmap bitmap, Integer compression) {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+    bitmap.compress(Bitmap.CompressFormat.JPEG, compression, byteArrayOutputStream);
     byte[] byteArray = byteArrayOutputStream.toByteArray();
     return Base64.encodeToString(byteArray, Base64.DEFAULT);
   }
