@@ -50,7 +50,7 @@ public class RNImgToBase64Module extends ReactContextBaseJavaModule {
         WritableMap reponseData = new Arguments().createMap();
         String base64Image = bitmapToBase64(image,compression);
         reponseData.putString("data", base64Image);
-        promise.resolve(reponseData);
+        promise.resolve("data:image/jpeg;base64,"+reponseData);
       }
     } catch (Error e) {
       promise.reject("Error", "Failed to decode Bitmap: " + e);
